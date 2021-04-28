@@ -4,20 +4,25 @@ class ShortUrl < ApplicationRecord
   CHARACTERS = [*'0'..'9', *'a'..'z', *'A'..'Z'].freeze
 
   validate :validate_full_url
+  validates :full_url, presence: true 
+  after_create :shorten_code
 
-  def self.short_code(short_code)  
-    id = 0
-    digit = 0
-    value.reverse.each_char do |char|
-      num = CHARACTERS.index(char)
-      id += num * (CHARACTERS.count ** digit)
-      digit += 1
-    end
+  def shorten_code
+    num = self.id
+    return CHARACTERS[0] if num == 0
+    result = ""
+      while num > 0
+        r = num % CHARACTERS.count
+        result.prepend(CHARACTERS[r])
+        num = (num / CHARACTERS.count).floor
+      end
     
-    ShorUrl.find(id)
+    self.update(short_code: result)
+    result
   end
 
   def update_title!
+    UpdateTitleJob.perform_now(self)
   end
 
   private
@@ -27,7 +32,7 @@ class ShortUrl < ApplicationRecord
     begin
       raise errors.add(:errors, "Full url is not a valid url") unless open(full_url).status == ["200","OK"]
     rescue
-      errors.add(:errors, "Full url is not a valid url")
+      errors.add(:full_url, "is not a valid url")
     end
 
 
