@@ -7,4 +7,6 @@ Rails.application.routes.draw do
   resources :short_urls, only: [:index, :create, :show]
   get "/" => "short_urls#index"
   get '*id' => 'short_urls#show'
+  get "/404" => "errors#not_found"
+
 end
