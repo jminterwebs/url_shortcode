@@ -7,6 +7,10 @@ class ShortUrlsController < ApplicationController
   end
 
   def create
+    short_url = ShortUrl.new
+    short_url.full_url = params[:full_url]
+    
+    
   end
 
   def show
