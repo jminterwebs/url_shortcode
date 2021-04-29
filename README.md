@@ -12,7 +12,7 @@
     docker-compose -f docker-compose-test.yml run short-app-rspec rails db:test:prepare
 
 # Additional Steps
-    docker-compose run short-app rails db:migrate    
+    docker-compose run short-app bundle install
 # To run the specs
 
     docker-compose -f docker-compose-test.yml run short-app-rspec
