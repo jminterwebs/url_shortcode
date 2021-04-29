@@ -3,6 +3,8 @@ class ShortUrl < ApplicationRecord
 
   CHARACTERS = [*'0'..'9', *'a'..'z', *'A'..'Z'].freeze
 
+
+  
   validate :validate_full_url
   validates :full_url, presence: true 
   after_create :shorten_code
@@ -22,7 +24,13 @@ class ShortUrl < ApplicationRecord
   end
 
   def update_title!
-    UpdateTitleJob.perform_now(self)
+    title = UpdateTitleJob.perform_now(self.id)
+    self.title = title
+    self
+  end
+
+  def public_attributes
+    self.attributes.slice('id', 'full_url', 'title', 'click_count', 'short_code')   
   end
 
   private
@@ -34,8 +42,8 @@ class ShortUrl < ApplicationRecord
     rescue
       errors.add(:full_url, "is not a valid url")
     end
-
-
   end
+
+  
 
 end
