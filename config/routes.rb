@@ -8,5 +8,6 @@ Rails.application.routes.draw do
   get "/" => "short_urls#index"
   get '*id' => 'short_urls#show'
   get "/404" => "errors#not_found"
+  get '/400' => 'errors#not_found'
 
 end

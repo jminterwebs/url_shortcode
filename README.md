@@ -19,11 +19,11 @@
 
 # Run the web server
 
-    docker-compose up
+docker-compose up
 
 # Adding a URL
 
-    curl -X POST -d "full_url=https://google.com" http://localhost:3000/short_urls.json
+    curl -X POST -d "full_url=https://github.com" http://localhost:3000/short_urls.json
 
 # Getting the top 100
 

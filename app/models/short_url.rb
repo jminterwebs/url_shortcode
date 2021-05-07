@@ -20,6 +20,7 @@ class ShortUrl < ApplicationRecord
       end
     
     self.update(short_code: result)
+    self.update_title!
     result
   end
 

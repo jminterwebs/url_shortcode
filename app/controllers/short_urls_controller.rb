@@ -21,7 +21,7 @@ class ShortUrlsController < ApplicationController
       short_url.shorten_code
       render json: short_url
     else
-      render json: short_url.errors
+      render json: short_url.errors,  :status => 400
     end
 
   end
@@ -31,7 +31,10 @@ class ShortUrlsController < ApplicationController
     
     if url
       url.update(click_count: url.click_count += 1) 
+      url.update_title! unless url.title
+
       redirect_to url.full_url
+      
     else
       render :json => @error_object.to_json, :status => 404
     end
